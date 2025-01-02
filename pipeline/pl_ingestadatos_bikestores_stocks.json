@@ -111,13 +111,13 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_sql_bikestores_products",
+									"referenceName": "ds_sql_bikestores_stocks",
 									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adlsg2_bikestores_products",
+									"referenceName": "ds_adlsg2_bikestores_stocks",
 									"type": "DatasetReference",
 									"parameters": {
 										"pr_contenedor": {
