@@ -5,6 +5,10 @@
 			"prg_url_keyvault30": {
 				"type": "string",
 				"value": "https://boclkeyvaultdev30.vault.azure.net/"
+			},
+			"prg_url_datalake30": {
+				"type": "string",
+				"value": "https://cualdatalakedev30.dfs.core.windows.net/"
 			}
 		},
 		"globalConfigurations": {
