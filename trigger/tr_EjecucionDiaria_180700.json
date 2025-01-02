@@ -35,11 +35,11 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2025-01-02T22:01:00",
+				"startTime": "2025-01-03T16:20:00",
 				"timeZone": "Central America Standard Time",
 				"schedule": {
 					"minutes": [
-						18
+						24
 					],
 					"hours": [
 						16
