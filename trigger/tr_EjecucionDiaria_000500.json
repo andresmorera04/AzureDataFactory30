@@ -1,0 +1,33 @@
+{
+	"name": "tr_EjecucionDiaria_000500",
+	"properties": {
+		"description": "Trigger que se ejecuta de forma diaria a las 12:05:00 am ",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_iterar_FechaProceso_Parametros",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2025-01-02T21:55:00",
+				"timeZone": "Central America Standard Time",
+				"schedule": {
+					"minutes": [
+						5
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}
