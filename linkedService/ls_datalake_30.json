@@ -1,0 +1,28 @@
+{
+	"name": "ls_datalake_30",
+	"properties": {
+		"description": "Linked Services al Data Lake ",
+		"parameters": {
+			"pr_url_datalake": {
+				"type": "string",
+				"defaultValue": "https://cualdatalakedev30.dfs.core.windows.net/"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "@{linkedService().pr_url_datalake}",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_keyvault_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+					}
+				},
+				"secretName": "secrdatalake30"
+			}
+		}
+	}
+}
