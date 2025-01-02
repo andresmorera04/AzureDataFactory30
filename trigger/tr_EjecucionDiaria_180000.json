@@ -28,6 +28,12 @@
 					"referenceName": "pl_ingestadatos_bikestores_stocks",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_customers",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
