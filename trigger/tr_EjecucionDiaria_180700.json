@@ -22,6 +22,12 @@
 					"referenceName": "pl_ingestadatos_bikestores_orders",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_staffs",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
