@@ -1,0 +1,9 @@
+{
+	"name": "fadadatafactorydev30",
+	"properties": {
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "true"
+		}
+	},
+	"location": "eastus2"
+}
