@@ -35,7 +35,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/brands/',dataset().pr_FechaProceso)",
+					"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/brands/año=',substring(dataset().pr_FechaProceso, 0, 4),'/mes=',substring(dataset().pr_FechaProceso, 5, 2),'/dia=',substring(dataset().pr_FechaProceso, 8, 2),'/')",
 					"type": "Expression"
 				},
 				"fileSystem": {
