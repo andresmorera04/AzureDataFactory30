@@ -10,6 +10,12 @@
 					"referenceName": "pl_ingestadatos_bikestores_brands",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_categories",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
