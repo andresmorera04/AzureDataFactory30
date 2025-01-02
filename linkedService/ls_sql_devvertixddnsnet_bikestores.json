@@ -1,0 +1,27 @@
+{
+	"name": "ls_sql_devvertixddnsnet_bikestores",
+	"properties": {
+		"description": "Linked Services al servidor donde está origen de datos Bikestores",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "devvertix.ddns.net,5722",
+			"database": "BikeStores",
+			"encrypt": "optional",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "integrator",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_keyvault_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+					}
+				},
+				"secretName": "secrdevvertixddnsnetbikestores"
+			}
+		}
+	}
+}
