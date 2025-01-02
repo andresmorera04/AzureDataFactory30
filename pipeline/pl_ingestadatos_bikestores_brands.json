@@ -94,7 +94,7 @@
 											}
 										},
 										"path": {
-											"value": "@concat(item().Contenedor, '/', item().Medalla, '/', item().BitacoraADF, 'brands/')",
+											"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'brands/')",
 											"type": "Expression"
 										}
 									}
