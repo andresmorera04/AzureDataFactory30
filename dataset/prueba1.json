@@ -1,0 +1,27 @@
+{
+	"name": "prueba1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake_30",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+			}
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/DataLake"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "prueba1.parquet",
+				"folderPath": "bronze",
+				"fileSystem": "reg"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
