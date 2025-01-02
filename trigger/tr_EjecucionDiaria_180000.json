@@ -1,0 +1,57 @@
+{
+	"name": "tr_EjecucionDiaria_180000",
+	"properties": {
+		"description": "Trigger Diario que se ejecutará todos los días a las 06:00:00 pm",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_brands",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_categories",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_products",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_stocks",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_customers",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2025-01-02T21:58:00",
+				"timeZone": "Central America Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						18
+					]
+				}
+			}
+		}
+	}
+}

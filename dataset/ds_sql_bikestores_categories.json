@@ -1,0 +1,29 @@
+{
+	"name": "ds_sql_bikestores_categories",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/BikeStores"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "brand_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "brand_name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "production",
+			"table": "categories"
+		}
+	}
+}

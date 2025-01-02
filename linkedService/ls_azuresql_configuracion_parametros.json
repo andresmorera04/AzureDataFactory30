@@ -1,0 +1,21 @@
+{
+	"name": "ls_azuresql_configuracion_parametros",
+	"properties": {
+		"description": "Linked Services que direcciona a la base de datos Configuracion para acceder a la tabla de paramtros",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_keyvault_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+					}
+				},
+				"secretName": "secrazuresqlintegrator"
+			}
+		}
+	}
+}
