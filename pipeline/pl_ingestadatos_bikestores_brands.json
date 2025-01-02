@@ -78,7 +78,27 @@
 								},
 								"enableStaging": false,
 								"parallelCopies": 1,
-								"validateDataConsistency": false,
+								"validateDataConsistency": true,
+								"logSettings": {
+									"enableCopyActivityLog": true,
+									"copyActivityLogSettings": {
+										"logLevel": "Warning",
+										"enableReliableLogging": false
+									},
+									"logLocationSettings": {
+										"linkedServiceName": {
+											"referenceName": "ls_datalake_30",
+											"type": "LinkedServiceReference",
+											"parameters": {
+												"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+											}
+										},
+										"path": {
+											"value": "@concat(item().Contenedor, '/', item().Medalla, '/', item().BitacoraADF, 'brands/')",
+											"type": "Expression"
+										}
+									}
+								},
 								"dataIntegrationUnits": 4,
 								"translator": {
 									"type": "TabularTranslator",
