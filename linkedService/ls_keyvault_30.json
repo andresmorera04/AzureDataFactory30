@@ -1,0 +1,17 @@
+{
+	"name": "ls_keyvault_30",
+	"properties": {
+		"description": "Linked Services que apunta al Key Vault para acceder a los secretos",
+		"parameters": {
+			"pr_url_keyvault": {
+				"type": "string",
+				"defaultValue": "https://boclkeyvaultdev30.vault.azure.net/"
+			}
+		},
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "@{linkedService().pr_url_keyvault}"
+		}
+	}
+}
