@@ -45,10 +45,10 @@
 				"timeZone": "Central America Standard Time",
 				"schedule": {
 					"minutes": [
-						0
+						12
 					],
 					"hours": [
-						18
+						16
 					]
 				}
 			}
