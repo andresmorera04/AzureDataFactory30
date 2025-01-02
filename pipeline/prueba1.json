@@ -58,7 +58,21 @@
 				"outputs": [
 					{
 						"referenceName": "prueba1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"pr_contenedor": {
+								"value": "@activity('Lookup1').output.firstRow.Contenedor",
+								"type": "Expression"
+							},
+							"pr_medalla": {
+								"value": "@activity('Lookup1').output.firstRow.Medalla",
+								"type": "Expression"
+							},
+							"pr_FechaProceso": {
+								"value": "@activity('Lookup1').output.firstRow.FechaProceso",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},
