@@ -8,6 +8,20 @@
 				"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
 			}
 		},
+		"parameters": {
+			"pr_contenedor": {
+				"type": "string",
+				"defaultValue": "reg"
+			},
+			"pr_medalla": {
+				"type": "string",
+				"defaultValue": "bronze"
+			},
+			"pr_FechaProceso": {
+				"type": "string",
+				"defaultValue": "1900-01-01"
+			}
+		},
 		"folder": {
 			"name": "DominioTemporalDesarrollo/DataLake"
 		},
@@ -16,9 +30,18 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "prueba1.parquet",
-				"folderPath": "bronze",
-				"fileSystem": "reg"
+				"fileName": {
+					"value": "@concat('prueba1_', replace(dataset().pr_FechaProceso, '-', ''), '.parquet')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/brands/año=',substring(dataset().pr_FechaProceso, 0, 4),'/mes=',substring(dataset().pr_FechaProceso, 5, 7),'/dia=',substring(dataset().pr_FechaProceso, 8, 10),'/')",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().pr_contenedor",
+					"type": "Expression"
+				}
 			},
 			"compressionCodec": "snappy"
 		},
