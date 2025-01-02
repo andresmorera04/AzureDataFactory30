@@ -7,12 +7,6 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_ingestadatos_bikestores_customers",
-					"type": "PipelineReference"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "pl_ingestadatos_bikestores_order_items",
 					"type": "PipelineReference"
 				}
