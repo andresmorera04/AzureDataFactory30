@@ -1,0 +1,124 @@
+{
+	"name": "pl_ingestadatos_fakerestapi_products",
+	"properties": {
+		"activities": [
+			{
+				"name": "CargarParametros",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosCri' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSELECT @varContenedor AS Contenedor, @varMedallaBronce AS Medalla, CAST(@varFechaProceso AS VARCHAR(10)) AS FechaProceso, @varBitacoraADF AS BitacoraADF",
+						"queryTimeout": "00:25:00",
+						"isolationLevel": "ReadCommitted",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_asql_configuracion_parametros",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "IngestaDatos",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "CargarParametros",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:00",
+						"requestInterval": "00.00:00:00.015",
+						"requestMethod": "GET"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"parallelCopies": 1,
+					"validateDataConsistency": true,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Warning",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "ls_datalake_30",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+								}
+							},
+							"path": {
+								"value": "@concat(activity('CargarParametros').output.firstRow.Contenedor, '/', activity('CargarParametros').output.firstRow.Medalla, '/FakeStoreApi/',activity('CargarParametros').output.firstRow.BitacoraADF, '/Products/')",
+								"type": "Expression"
+							}
+						}
+					},
+					"dataIntegrationUnits": 4
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_restapi_fakestoreapi_products",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adlsg2_fakestoreapi_products",
+						"type": "DatasetReference",
+						"parameters": {
+							"pr_contenedor": {
+								"value": "@activity('CargarParametros').output.firstRow.Contenedor",
+								"type": "Expression"
+							},
+							"pr_medalla": {
+								"value": "@activity('CargarParametros').output.firstRow.Medalla",
+								"type": "Expression"
+							},
+							"pr_fechaproceso": {
+								"value": "@activity('CargarParametros').output.firstRow.FechaProceso",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "DominioTemporalDesarrollo/DataPipelines"
+		},
+		"annotations": []
+	}
+}
