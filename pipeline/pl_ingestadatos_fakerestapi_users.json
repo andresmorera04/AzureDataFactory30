@@ -7,7 +7,7 @@
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
-					"timeout": "0.00:10:00",
+					"timeout": "0.00:10:30",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -77,7 +77,7 @@
 								"referenceName": "ls_datalake_30",
 								"type": "LinkedServiceReference",
 								"parameters": {
-									"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+									"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
 								}
 							},
 							"path": {
