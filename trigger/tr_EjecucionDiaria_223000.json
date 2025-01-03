@@ -1,31 +1,37 @@
 {
-	"name": "tr_EjecucionDiaria_180700",
+	"name": "tr_EjecucionDiaria_223000",
 	"properties": {
-		"description": "Trigger de Ejecucion Diaria que se ejecuta a las 06:07:00 pm",
+		"description": "Trigger Diario que se ejecutará todos los días a las 10:30:00 pm",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_ingestadatos_bikestores_order_items",
+					"referenceName": "pl_ingestadatos_bikestores_brands",
 					"type": "PipelineReference"
 				}
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_ingestadatos_bikestores_orders",
+					"referenceName": "pl_ingestadatos_bikestores_categories",
 					"type": "PipelineReference"
 				}
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_ingestadatos_bikestores_staffs",
+					"referenceName": "pl_ingestadatos_bikestores_products",
 					"type": "PipelineReference"
 				}
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_ingestadatos_bikestores_stores",
+					"referenceName": "pl_ingestadatos_bikestores_stocks",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_bikestores_customers",
 					"type": "PipelineReference"
 				}
 			}
@@ -35,14 +41,14 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2025-01-02T17:00:00",
+				"startTime": "2025-01-02T22:00:00",
 				"timeZone": "Central America Standard Time",
 				"schedule": {
 					"minutes": [
-						7
+						30
 					],
 					"hours": [
-						18
+						22
 					]
 				}
 			}
