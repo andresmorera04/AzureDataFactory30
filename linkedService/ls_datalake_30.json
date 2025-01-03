@@ -5,7 +5,7 @@
 		"parameters": {
 			"pr_url_datalake": {
 				"type": "string",
-				"defaultValue": "https://cualdatalakedev30.dfs.core.windows.net/"
+				"defaultValue": "https://cualdatalake30.dfs.core.windows.net/"
 			}
 		},
 		"annotations": [],
