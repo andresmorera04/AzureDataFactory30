@@ -1,7 +1,7 @@
 {
 	"name": "tr_EjecucionDiaria_223000",
 	"properties": {
-		"description": "Trigger Diario que se ejecutará todos los días a las 06:00:00 pm",
+		"description": "Trigger Diario que se ejecutará todos los días a las 10:30:00 pm",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
