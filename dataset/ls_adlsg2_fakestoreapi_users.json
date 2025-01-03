@@ -35,7 +35,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@concat(dataset().pr_medalla, '/bronze/FakeStoreApi/Users/año=', substring(dataset().pr_fechaproceso, 0, 4), '/mes=', substring(dataset().pr_fechaproceso, 5, 2), '/dia=', substring(dataset().pr_fechaproceso, 8, 2), '/')",
+					"value": "@concat(dataset().pr_medalla, '/FakeStoreApi/Users/año=', substring(dataset().pr_fechaproceso, 0, 4), '/mes=', substring(dataset().pr_fechaproceso, 5, 2), '/dia=', substring(dataset().pr_fechaproceso, 8, 2), '/')",
 					"type": "Expression"
 				},
 				"fileSystem": {
