@@ -1,0 +1,884 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "fadadatafactory30"
+		},
+		"ls_keyvault_30_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "@{linkedService().pr_url_keyvault}"
+		},
+		"ls_restapi_fakestoreapi_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://fakestoreapi.com"
+		},
+		"ls_azuresql_configuracion_parametros_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "secrazuresqlintegrator"
+		},
+		"ls_datalake_30_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().pr_url_datalake}"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "devvertix.ddns.net,5722"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "BikeStores"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "integrator"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_keyvault_30')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Linked Services que apunta al Key Vault para acceder a los secretos",
+				"parameters": {
+					"pr_url_keyvault": {
+						"type": "string",
+						"defaultValue": "https://boclkeyvault30.vault.azure.net/"
+					}
+				},
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_keyvault_30_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_restapi_fakestoreapi')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "RestApi que simula datos de una tienda",
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('ls_restapi_fakestoreapi_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_restapi_fakestoreapi_products')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_restapi_fakestoreapi",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/FakeStoreApi"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "/products"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_restapi_fakestoreapi')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_azuresql_configuracion_parametros')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Linked Services que direcciona a la base de datos Configuracion para acceder a la tabla de paramtros",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_keyvault_30",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"pr_url_keyvault": "https://boclkeyvault30.vault.azure.net/"
+							}
+						},
+						"secretName": "[parameters('ls_azuresql_configuracion_parametros_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_keyvault_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_datalake_30')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Linked Services al Data Lake ",
+				"parameters": {
+					"pr_url_datalake": {
+						"type": "string",
+						"defaultValue": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_datalake_30_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_keyvault_30",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"pr_url_keyvault": "https://boclkeyvault30.vault.azure.net/"
+							}
+						},
+						"secretName": "secrdatalake30"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_keyvault_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sql_devvertixddnsnet_bikestores')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Linked Services al servidor donde está origen de datos Bikestores",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_server')]",
+					"database": "[parameters('ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_database')]",
+					"encrypt": "optional",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_keyvault_30",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"pr_url_keyvault": "https://boclkeyvault30.vault.azure.net/"
+							}
+						},
+						"secretName": "secrdevvertixddnsnetbikestores"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_keyvault_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_brands')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('brands_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/brands/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_categories')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('categories_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/categories/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_customers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('customers_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/sales/customers/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_order_items')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('order_items_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/sales/order_items/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('orders_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/sales/orders/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_products')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('products_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/products/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_staffs')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('staffs_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/sales/staffs/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_stocks')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('stocks_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/production/stocks/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_bikestores_stores')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "reg"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('stores_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/devvertixddnsnet/BikeStores/sales/stores/año=',substring(dataset().pr_fechaproceso, 0, 4),'/mes=',substring(dataset().pr_fechaproceso, 5, 2),'/dia=',substring(dataset().pr_fechaproceso, 8, 2),'/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_adlsg2_fakestoreapi_products')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "cri"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('Products_', replace(dataset().pr_fechaproceso, '-', ''), '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/FakeStoreApi/Products/año=',substring(dataset().pr_fechaproceso, 0, 4), '/mes=',substring(dataset().pr_fechaproceso, 5, 2), '/dia=', substring(dataset().pr_fechaproceso, 8, 2), '/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_asql_configuracion_parametros')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azuresql_configuracion_parametros",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/Configuracion"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Codigo",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Clave",
+						"type": "varchar"
+					},
+					{
+						"name": "Valor",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Parametros"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_azuresql_configuracion_parametros')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_brands')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "production",
+					"table": "brands"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_devvertixddnsnet_bikestores')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_categories')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "production",
+					"table": "categories"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_devvertixddnsnet_bikestores')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_customers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "sales",
+					"table": "customers"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_devvertixddnsnet_bikestores')]"
+			]
+		}
+	]
+}

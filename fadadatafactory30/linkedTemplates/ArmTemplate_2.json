@@ -1,0 +1,57 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "fadadatafactory30"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionQuincenal_5_20_220000')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger que se ejecuta cada dos semanas",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_fakerestapi_products",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2025-01-03T01:42:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								22
+							],
+							"monthDays": [
+								5,
+								20
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

@@ -1,0 +1,2014 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "fadadatafactory30"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_order_items')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "sales",
+					"table": "order_items"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "sales",
+					"table": "orders"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_products')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "production",
+					"table": "products"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_staffs')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "sales",
+					"table": "staffs"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_stocks')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "production",
+					"table": "stocks"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_stores')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/BikeStores"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "brand_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "brand_name",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "sales",
+					"table": "stores"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_brands')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'brands/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_brands",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_brands",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_categories')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'categories/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_categories",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_categories",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_customers')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'customers/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_customers",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_customers",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_order_items')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrar' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"batchCount": 5,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "SELECT \n\tA.order_id\n\t,A.item_id\n\t,A.product_id\n\t,A.quantity\n\t,A.list_price\n\t,A.discount\nFROM \n\tBikeStores.sales.order_items AS A\n\tINNER JOIN BikeStores.sales.orders AS B \n\t\tON A.order_id = B.order_id\nWHERE \n\tB.order_date >= CAST(CAST('@{item().FechaProceso}' AS DATE) AS DATETIME) \n\tAND B.order_date < CAST(DATEADD(DAY, 1, CAST('@{item().FechaProceso}' AS DATE)) AS DATETIME)\n;\n",
+												"type": "Expression"
+											},
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'order_items/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_order_items",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_order_items",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_order_items')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_orders')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrar' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"batchCount": 5,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "SELECT \r\n\torder_id\r\n\t,customer_id\r\n\t,order_status\r\n\t,order_date\r\n\t,required_date\r\n\t,shipped_date\r\n\t,store_id\r\n\t,staff_id\r\nFROM \r\n\tBikeStores.sales.orders\r\nWHERE \r\n\torder_date >= CAST(CAST('@{item().FechaProceso}' AS DATE) AS DATETIME) \r\n\tAND order_date < CAST(DATEADD(DAY, 1, CAST('@{item().FechaProceso}' AS DATE)) AS DATETIME)\r\n;\r\n",
+												"type": "Expression"
+											},
+											"queryTimeout": "00:30:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'orders/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_orders",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_orders",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_orders')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_products')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'products/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_products",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_products",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_products')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_staffs')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'staffs/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_staffs",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_staffs",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_staffs')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_stocks')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'stocks/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_stocks",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_stocks",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_stocks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_bikestores_stores')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:15:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varDiasBorrarCargar INT\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varDiasBorrarCargar = (CAST(Valor AS INT) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrarCatalogosMaestros' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSET @varFechaInicio = DATEADD(DAY, @varDiasBorrarCargar, @varFechaProceso)\r\n\r\nDECLARE\r\n\t@varTablaSalida TABLE (Contenedor VARCHAR(5), Medalla VARCHAR(15), FechaProceso VARCHAR(10), BitacoraADF VARCHAR(50));\r\n\r\nWHILE @varFechaInicio <= @varFechaProceso \r\nBEGIN\r\n\r\n\tINSERT INTO @varTablaSalida \r\n\tSELECT @varContenedor, @varMedallaBronce, CAST(@varFechaInicio AS VARCHAR(10)), @varBitacoraADF\r\n\r\n\tSET @varFechaInicio = DATEADD(DAY, 1, @varFechaInicio)\r\n\r\nEND \r\n\r\nSELECT Contenedor, Medalla, FechaProceso, BitacoraADF FROM @varTablaSalida;",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "RecorreFechas",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('CargarParametros').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "IngestaDatos",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"queryTimeout": "00:25:00",
+											"isolationLevel": "ReadCommitted",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"validateDataConsistency": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_datalake_30",
+													"type": "LinkedServiceReference",
+													"parameters": {
+														"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+													}
+												},
+												"path": {
+													"value": "@concat(item().Contenedor, '/', item().Medalla, '/devvertixddnsnet/BikeStores/', item().BitacoraADF, 'stores/')",
+													"type": "Expression"
+												}
+											}
+										},
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_sql_bikestores_stores",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adlsg2_bikestores_stores",
+											"type": "DatasetReference",
+											"parameters": {
+												"pr_contenedor": {
+													"value": "@item().Contenedor",
+													"type": "Expression"
+												},
+												"pr_medalla": {
+													"value": "@item().Medalla",
+													"type": "Expression"
+												},
+												"pr_fechaproceso": {
+													"value": "@item().FechaProceso",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_bikestores_stores')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_fakerestapi_products')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosCri' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSELECT @varContenedor AS Contenedor, @varMedallaBronce AS Medalla, CAST(@varFechaProceso AS VARCHAR(10)) AS FechaProceso, @varBitacoraADF AS BitacoraADF",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "IngestaDatos",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:00",
+								"requestInterval": "00.00:00:00.015",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"parallelCopies": 1,
+							"validateDataConsistency": true,
+							"logSettings": {
+								"enableCopyActivityLog": true,
+								"copyActivityLogSettings": {
+									"logLevel": "Warning",
+									"enableReliableLogging": false
+								},
+								"logLocationSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_datalake_30",
+										"type": "LinkedServiceReference",
+										"parameters": {
+											"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+										}
+									},
+									"path": {
+										"value": "@concat(activity('CargarParametros').output.firstRow.Contenedor, '/', activity('CargarParametros').output.firstRow.Medalla, '/FakeStoreApi/',activity('CargarParametros').output.firstRow.BitacoraADF, '/Products/')",
+										"type": "Expression"
+									}
+								}
+							},
+							"dataIntegrationUnits": 4
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_restapi_fakestoreapi_products",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adlsg2_fakestoreapi_products",
+								"type": "DatasetReference",
+								"parameters": {
+									"pr_contenedor": {
+										"value": "@activity('CargarParametros').output.firstRow.Contenedor",
+										"type": "Expression"
+									},
+									"pr_medalla": {
+										"value": "@activity('CargarParametros').output.firstRow.Medalla",
+										"type": "Expression"
+									},
+									"pr_fechaproceso": {
+										"value": "@activity('CargarParametros').output.firstRow.FechaProceso",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_iterar_FechaProceso_Parametros')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IterarFechaProceso",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT \r\n\tCodigo, \r\n\tClave, \r\n\tCAST(CASE \r\n\t\tWHEN Valor IS NULL THEN CAST(GETDATE() AS DATE)\r\n\t\tWHEN LEN(RTRIM(LTRIM(Valor))) = 0 THEN CAST(GETDATE() AS DATE)\r\n\t\tELSE DATEADD(DAY, 1, CAST(Valor AS DATE))\r\n\tEND AS VARCHAR(15)) AS Valor \r\nFROM \r\n\tdbo.Parametros \r\nWHERE \r\n\tClave = 'FechaProceso';",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"Codigo"
+									]
+								},
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"parallelCopies": 1,
+							"dataIntegrationUnits": 4,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/Configuracion"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_000500')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger que se ejecuta de forma diaria a las 12:05:00 am ",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_iterar_FechaProceso_Parametros",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2025-01-02T22:00:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								5
+							],
+							"hours": [
+								0
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_iterar_FechaProceso_Parametros')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_180000')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger Diario que se ejecutará todos los días a las 06:00:00 pm",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_brands",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_categories",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_products",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_stocks",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_customers",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2025-01-02T17:00:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_brands')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_categories')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_products')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_stocks')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_customers')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_180700')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger de Ejecucion Diaria que se ejecuta a las 06:07:00 pm",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_order_items",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_orders",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_staffs",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_bikestores_stores",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2025-01-02T17:00:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								7
+							],
+							"hours": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_order_items')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_orders')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_staffs')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_bikestores_stores')]"
+			]
+		}
+	]
+}
