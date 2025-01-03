@@ -1,5 +1,5 @@
 {
-	"name": "tr_EjecucionQuincenal",
+	"name": "tr_EjecucionQuincenal_5_20_220000",
 	"properties": {
 		"description": "Trigger que se ejecuta cada dos semanas",
 		"annotations": [],
@@ -28,7 +28,7 @@
 					],
 					"monthDays": [
 						5,
-						15
+						20
 					]
 				}
 			}
