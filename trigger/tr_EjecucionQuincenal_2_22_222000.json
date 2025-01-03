@@ -10,6 +10,12 @@
 					"referenceName": "pl_ingestadatos_fakerestapi_products",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_fakerestapi_users",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
