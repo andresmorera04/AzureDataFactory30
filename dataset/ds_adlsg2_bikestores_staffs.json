@@ -5,7 +5,7 @@
 			"referenceName": "ls_datalake_30",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+				"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
 			}
 		},
 		"parameters": {
