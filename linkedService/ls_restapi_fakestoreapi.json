@@ -1,0 +1,13 @@
+{
+	"name": "ls_restapi_fakestoreapi",
+	"properties": {
+		"description": "RestApi que simula datos de una tienda",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://fakestoreapi.com",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
