@@ -1,13 +1,19 @@
 {
-	"name": "tr_EjecucionQuincenal_5_20_220000",
+	"name": "tr_EjecucionQuincenal_2_22_222000",
 	"properties": {
-		"description": "Trigger que se ejecuta cada dos semanas",
+		"description": "Trigger que se ejecuta cada dos semanas los días 2 y 22 a las 10:20:00 pm",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
 					"referenceName": "pl_ingestadatos_fakerestapi_products",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ingestadatos_fakerestapi_users",
 					"type": "PipelineReference"
 				}
 			}
@@ -17,18 +23,18 @@
 			"recurrence": {
 				"frequency": "Month",
 				"interval": 1,
-				"startTime": "2025-01-03T01:42:00",
+				"startTime": "2025-01-02T22:00:00",
 				"timeZone": "Central America Standard Time",
 				"schedule": {
 					"minutes": [
-						0
+						20
 					],
 					"hours": [
 						22
 					],
 					"monthDays": [
-						5,
-						20
+						2,
+						22
 					]
 				}
 			}
