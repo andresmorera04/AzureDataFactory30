@@ -1636,6 +1636,143 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingestadatos_fakerestapi_users')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarParametros",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:30",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE\r\n\t@varContenedor VARCHAR(5)\r\n\t,@varMedallaBronce VARCHAR(15)\r\n\t,@varBitacoraADF VARCHAR(50)\r\n\t,@varFechaProceso DATE\r\n\t,@varFechaInicio DATE\r\n\r\nSELECT TOP 1 @varContenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosCri' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varMedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varFechaProceso = CAST(Valor AS DATE) FROM dbo.Parametros WHERE Clave = 'FechaProceso' ORDER BY Codigo DESC;\r\nSELECT TOP 1 @varBitacoraADF = Valor FROM dbo.Parametros WHERE Clave = 'BitacoraCoherenciaDataFactory' ORDER BY Codigo DESC;\r\n\r\nSELECT @varContenedor AS Contenedor, @varMedallaBronce AS Medalla, CAST(@varFechaProceso AS VARCHAR(10)) AS FechaProceso, @varBitacoraADF AS BitacoraADF",
+								"queryTimeout": "00:25:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_asql_configuracion_parametros",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "IngestaDatos",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CargarParametros",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:00",
+								"requestInterval": "00.00:00:00.015",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"parallelCopies": 1,
+							"validateDataConsistency": true,
+							"logSettings": {
+								"enableCopyActivityLog": true,
+								"copyActivityLogSettings": {
+									"logLevel": "Warning",
+									"enableReliableLogging": false
+								},
+								"logLocationSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_datalake_30",
+										"type": "LinkedServiceReference",
+										"parameters": {
+											"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+										}
+									},
+									"path": {
+										"value": "@concat(activity('CargarParametros').output.firstRow.Contenedor, '/', activity('CargarParametros').output.firstRow.Medalla, '/FakeStoreApi/',activity('CargarParametros').output.firstRow.BitacoraADF, '/Users/')",
+										"type": "Expression"
+									}
+								}
+							},
+							"dataIntegrationUnits": 4
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_restapi_fakestoreapi_users",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ls_adlsg2_fakestoreapi_users",
+								"type": "DatasetReference",
+								"parameters": {
+									"pr_contenedor": {
+										"value": "@activity('CargarParametros').output.firstRow.Contenedor",
+										"type": "Expression"
+									},
+									"pr_medalla": {
+										"value": "@activity('CargarParametros').output.firstRow.Medalla",
+										"type": "Expression"
+									},
+									"pr_fechaproceso": {
+										"value": "@activity('CargarParametros').output.firstRow.FechaProceso",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataPipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_asql_configuracion_parametros')]",
+				"[concat(variables('factoryId'), '/datasets/ds_restapi_fakestoreapi_users')]",
+				"[concat(variables('factoryId'), '/datasets/ls_adlsg2_fakestoreapi_users')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_iterar_FechaProceso_Parametros')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2325,6 +2462,29 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_restapi_fakestoreapi_users')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_restapi_fakestoreapi",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/FakeStoreApi"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "/users"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_restapi_fakestoreapi')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_brands')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2631,6 +2791,60 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_adlsg2_fakestoreapi_users')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_datalake": "https://cualdatalake30.dfs.core.windows.net/"
+					}
+				},
+				"parameters": {
+					"pr_contenedor": {
+						"type": "string",
+						"defaultValue": "cri"
+					},
+					"pr_medalla": {
+						"type": "string",
+						"defaultValue": "bronze"
+					},
+					"pr_fechaproceso": {
+						"type": "string",
+						"defaultValue": "1900-01-01"
+					}
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/DataLake"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('Users_', replace(dataset().pr_fechaproceso, '-', ''), '.json')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().pr_medalla, '/FakeStoreApi/Users/año=', substring(dataset().pr_fechaproceso, 0, 4), '/mes=', substring(dataset().pr_fechaproceso, 5, 2), '/dia=', substring(dataset().pr_fechaproceso, 8, 2), '/')",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().pr_contenedor",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_30')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_azuresql_configuracion_parametros')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -2797,11 +3011,11 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_180000')]",
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_223000')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Trigger Diario que se ejecutará todos los días a las 06:00:00 pm",
+				"description": "Trigger Diario que se ejecutará todos los días a las 10:30:00 pm",
 				"annotations": [],
 				"runtimeState": "Started",
 				"pipelines": [
@@ -2846,14 +3060,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2025-01-02T17:00:00",
+						"startTime": "2025-01-02T22:00:00",
 						"timeZone": "Central America Standard Time",
 						"schedule": {
 							"minutes": [
-								0
+								30
 							],
 							"hours": [
-								18
+								22
 							]
 						}
 					}
@@ -2868,11 +3082,11 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_180700')]",
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionDiaria_223700')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Trigger de Ejecucion Diaria que se ejecuta a las 06:07:00 pm",
+				"description": "Trigger de Ejecucion Diaria que se ejecuta a las 10:37:00 pm",
 				"annotations": [],
 				"runtimeState": "Started",
 				"pipelines": [
@@ -2910,14 +3124,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2025-01-02T17:00:00",
+						"startTime": "2025-01-02T22:00:00",
 						"timeZone": "Central America Standard Time",
 						"schedule": {
 							"minutes": [
-								7
+								37
 							],
 							"hours": [
-								18
+								22
 							]
 						}
 					}
@@ -2931,17 +3145,24 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_EjecucionQuincenal_5_20_220000')]",
+			"name": "[concat(parameters('factoryName'), '/tr_EjecucionQuincenal_2_22_222000')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Trigger que se ejecuta cada dos semanas",
+				"description": "Trigger que se ejecuta cada dos semanas los días 2 y 22 a las 10:20:00 pm",
 				"annotations": [],
 				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
 							"referenceName": "pl_ingestadatos_fakerestapi_products",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ingestadatos_fakerestapi_users",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -2952,25 +3173,26 @@
 					"recurrence": {
 						"frequency": "Month",
 						"interval": 1,
-						"startTime": "2025-01-03T01:42:00",
+						"startTime": "2025-01-02T22:00:00",
 						"timeZone": "Central America Standard Time",
 						"schedule": {
 							"minutes": [
-								0
+								20
 							],
 							"hours": [
 								22
 							],
 							"monthDays": [
-								5,
-								20
+								2,
+								22
 							]
 						}
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_fakerestapi_products')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_fakerestapi_products')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_ingestadatos_fakerestapi_users')]"
 			]
 		}
 	]

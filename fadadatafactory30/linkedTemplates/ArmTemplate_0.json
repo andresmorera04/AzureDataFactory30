@@ -100,6 +100,29 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_restapi_fakestoreapi_users')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_restapi_fakestoreapi",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DominioTemporalDesarrollo/FakeStoreApi"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": "/users"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_restapi_fakestoreapi')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_azuresql_configuracion_parametros')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -840,40 +863,6 @@
 				"typeProperties": {
 					"schema": "production",
 					"table": "categories"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sql_devvertixddnsnet_bikestores')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sql_bikestores_customers')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sql_devvertixddnsnet_bikestores",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "DominioTemporalDesarrollo/BikeStores"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "brand_id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "brand_name",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "sales",
-					"table": "customers"
 				}
 			},
 			"dependsOn": [
