@@ -11,7 +11,7 @@
 					"referenceName": "ls_keyvault_30",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+						"pr_url_keyvault": "https://boclkeyvault30.vault.azure.net/"
 					}
 				},
 				"secretName": "secrazuresqlintegrator"
