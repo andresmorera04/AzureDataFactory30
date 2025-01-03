@@ -1,6 +1,12 @@
 {
 	"name": "fadadatafactorydev30",
 	"properties": {
+		"globalParameters": {
+			"prg_url_keyvault_30": {
+				"type": "string",
+				"value": "https://boclkeyvaultdev30.vault.azure.net/"
+			}
+		},
 		"globalConfigurations": {
 			"PipelineBillingEnabled": "true"
 		}
