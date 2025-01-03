@@ -42,10 +42,6 @@
 					"value": "@dataset().pr_contenedor",
 					"type": "Expression"
 				}
-			},
-			"compression": {
-				"type": "snappy",
-				"level": "Fastest"
 			}
 		},
 		"schema": {}
