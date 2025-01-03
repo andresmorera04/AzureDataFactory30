@@ -5,7 +5,7 @@
 		"parameters": {
 			"pr_url_keyvault": {
 				"type": "string",
-				"defaultValue": "https://boclkeyvaultdev30.vault.azure.net/"
+				"defaultValue": "https://boclkeyvault30.vault.azure.net/"
 			}
 		},
 		"annotations": [],
