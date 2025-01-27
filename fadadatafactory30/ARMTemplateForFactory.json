@@ -1793,7 +1793,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT \r\n\tCodigo, \r\n\tClave, \r\n\tCAST(CASE \r\n\t\tWHEN Valor IS NULL THEN CAST(GETDATE() AS DATE)\r\n\t\tWHEN LEN(RTRIM(LTRIM(Valor))) = 0 THEN CAST(GETDATE() AS DATE)\r\n\t\tELSE DATEADD(DAY, 4, CAST(Valor AS DATE))\r\n\tEND AS VARCHAR(15)) AS Valor \r\nFROM \r\n\tdbo.Parametros \r\nWHERE \r\n\tClave = 'FechaProceso';",
+								"sqlReaderQuery": "SELECT \r\n\tCodigo, \r\n\tClave, \r\n\tCAST(CASE \r\n\t\tWHEN Valor IS NULL THEN CAST(GETDATE() AS DATE)\r\n\t\tWHEN LEN(RTRIM(LTRIM(Valor))) = 0 THEN CAST(GETDATE() AS DATE)\r\n\t\tELSE DATEADD(DAY, 2, CAST(Valor AS DATE))\r\n\tEND AS VARCHAR(15)) AS Valor \r\nFROM \r\n\tdbo.Parametros \r\nWHERE \r\n\tClave = 'FechaProceso';",
 								"queryTimeout": "00:25:00",
 								"isolationLevel": "ReadCommitted",
 								"partitionOption": "None"
