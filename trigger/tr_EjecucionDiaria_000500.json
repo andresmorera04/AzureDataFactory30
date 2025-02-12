@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Trigger que se ejecuta de forma diaria a las 12:05:00 am ",
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
