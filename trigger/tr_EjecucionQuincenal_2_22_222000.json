@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Trigger que se ejecuta cada dos semanas los días 2 y 22 a las 10:20:00 pm",
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
