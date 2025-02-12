@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "fadadatafactorydev30"
+		},
+		"ls_azuresql_configuracion_parametros_properties_typeProperties_connectionString_secretName": {
+			"value": "secrazuresqlintegrator"
+		},
+		"ls_datalake_30_properties_typeProperties_url": {
+			"value": "@{linkedService().pr_url_datalake}"
+		},
+		"ls_keyvault_30_properties_typeProperties_baseUrl": {
+			"value": "@{linkedService().pr_url_keyvault}"
+		},
+		"ls_restapi_fakestoreapi_properties_typeProperties_url": {
+			"value": "https://fakestoreapi.com"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_server": {
+			"value": "devvertix.ddns.net,5722"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_database": {
+			"value": "BikeStores"
+		},
+		"ls_sql_devvertixddnsnet_bikestores_properties_typeProperties_userName": {
+			"value": "integrator"
+		}
+	}
+}
