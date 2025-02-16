@@ -5,7 +5,14 @@
 			{
 				"name": "IterarFechaProceso",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ObtenerDiasIncrementar",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.00:10:00",
 					"retry": 0,
@@ -17,7 +24,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT \r\n\tCodigo, \r\n\tClave, \r\n\tCAST(CASE \r\n\t\tWHEN Valor IS NULL THEN CAST(GETDATE() AS DATE)\r\n\t\tWHEN LEN(RTRIM(LTRIM(Valor))) = 0 THEN CAST(GETDATE() AS DATE)\r\n\t\tELSE DATEADD(DAY, 2, CAST(Valor AS DATE))\r\n\tEND AS VARCHAR(15)) AS Valor \r\nFROM \r\n\tdbo.Parametros \r\nWHERE \r\n\tClave = 'FechaProceso';",
+						"sqlReaderQuery": "SELECT \r\n\tCodigo, \r\n\tClave, \r\n\tCAST(CASE \r\n\t\tWHEN Valor IS NULL THEN CAST(GETDATE() AS DATE)\r\n\t\tWHEN LEN(RTRIM(LTRIM(Valor))) = 0 THEN CAST(GETDATE() AS DATE)\r\n\t\tELSE DATEADD(DAY, @{activity('ObtenerDiasIncrementar').output.firstRow.Valor}, CAST(Valor AS DATE))\r\n\tEND AS VARCHAR(15)) AS Valor \r\nFROM \r\n\tdbo.Parametros \r\nWHERE \r\n\tClave = 'FechaProceso';",
 						"queryTimeout": "00:25:00",
 						"isolationLevel": "ReadCommitted",
 						"partitionOption": "None"
@@ -58,6 +65,32 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "ObtenerDiasIncrementar",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT TOP 1 CAST(Valor AS INT) AS Valor FROM [dbo].[Parametros] WHERE Clave = 'DiasIncrementarFechaProceso' ORDER BY Codigo DESC; ",
+						"queryTimeout": "00:25:00",
+						"isolationLevel": "ReadCommitted",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_asql_configuracion_parametros",
+						"type": "DatasetReference"
+					}
+				}
 			}
 		],
 		"folder": {
