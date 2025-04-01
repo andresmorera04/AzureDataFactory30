@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "Db2Source",
-						"query": "SELECT  \r\n\tFECHA\r\n\t,MONTOFACTURA \r\n\t,CLIENTE \r\n\t,(LEFT(NUMTARJETA, 8) || '****' || RIGHT(NUMTARJETA, 4) )AS NUMTARJETA\r\n\t,('0x' || HEX(HASH(CAST(NUMTARJETA AS VARCHAR(50) CCSID UNICODE), 3))) AS HashLlaveNegocio\r\nFROM \r\n\tQS36FTEST.FACTURA;"
+						"query": "SELECT  \r\n\tFECHA\r\n\t,MONTOFACTURA \r\n\t,CLIENTE \r\n\t,(LEFT(NUMTARJETA, 8) || '****' || RIGHT(NUMTARJETA, 4) )AS NUMTARJETA\r\n\t,HEX(HASH(CAST(NUMTARJETA AS VARCHAR(50) CCSID UNICODE), 3)) AS HashLlaveNegocio\r\nFROM \r\n\tQS36FTEST.FACTURA;"
 					},
 					"sink": {
 						"type": "ParquetSink",
