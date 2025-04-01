@@ -1,0 +1,19 @@
+{
+	"name": "ds_oraclexe_sql_maestrotarjeta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_oracle_sql_prueba1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/PruebasPCIDSS"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SYSTEM",
+			"table": "MAESTROTARJETAS"
+		}
+	}
+}
