@@ -1,0 +1,19 @@
+{
+	"name": "ds_db2_sql_FACTURA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_db2_sql_prueba1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/PruebasPCIDSS"
+		},
+		"annotations": [],
+		"type": "Db2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "QS36FTEST",
+			"table": "FACTURA"
+		}
+	}
+}
