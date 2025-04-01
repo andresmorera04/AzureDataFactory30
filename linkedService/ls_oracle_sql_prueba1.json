@@ -1,0 +1,22 @@
+{
+	"name": "ls_oracle_sql_prueba1",
+	"properties": {
+		"description": "ls_oracle_sql_prueba1",
+		"annotations": [],
+		"type": "Oracle",
+		"typeProperties": {
+			"connectionString": "host=dev-mssql2019.ddns.net;port=1521;sid=xe;user id=SYSTEM",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_keyvault_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+					}
+				},
+				"secretName": "secroraclexedevmssql2019ddnsnet"
+			}
+		}
+	}
+}
