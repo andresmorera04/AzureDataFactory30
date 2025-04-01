@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "OracleSource",
-						"oracleReaderQuery": "SELECT \r\n    Tipo \r\n    ,SUBSTR(NumeroTarjeta, 1, 8) || '****' || SUBSTR(NumeroTarjeta, -4) AS NUMEROTARJETA\r\n    ,('0x' || standard_hash(UTL_I18N.STRING_TO_RAW(TO_CHAR(NumeroTarjeta), 'AL32UTF8'), 'SHA512')) AS HashLlaveNegocio\r\nFROM \r\n    SYSTEM.MAESTROTARJETAS;",
+						"oracleReaderQuery": "SELECT \r\n    Tipo \r\n    ,SUBSTR(NumeroTarjeta, 1, 8) || '****' || SUBSTR(NumeroTarjeta, -4) AS NUMEROTARJETA\r\n    ,('' || standard_hash(UTL_I18N.STRING_TO_RAW(TO_CHAR(NumeroTarjeta), 'AL32UTF8'), 'SHA512')) AS HashLlaveNegocio\r\nFROM \r\n    SYSTEM.MAESTROTARJETAS;",
 						"partitionOption": "None",
 						"convertDecimalToInteger": false,
 						"queryTimeout": "00:25:00"
