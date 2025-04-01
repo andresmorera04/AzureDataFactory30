@@ -1,0 +1,62 @@
+{
+	"name": "pl_ingesta_factura",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": "SELECT  \r\n\tFECHA\r\n\t,MONTOFACTURA \r\n\t,CLIENTE \r\n\t,(LEFT(NUMTARJETA, 8) || '****' || RIGHT(NUMTARJETA, 4) )AS NUMTARJETA\r\n\t,('0x' || HEX(HASH(CAST(NUMTARJETA AS VARCHAR(50) CCSID UNICODE), 3))) AS HashLlaveNegocio\r\nFROM \r\n\tQS36FTEST.FACTURA;"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"parallelCopies": 1,
+					"dataIntegrationUnits": 4,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_db2_sql_FACTURA",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adlsg2_parquet_ds_db2_sql_FACTURA",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "DominioTemporalDesarrollo/DataPipelines/PruebasPCIDSS"
+		},
+		"annotations": []
+	}
+}
