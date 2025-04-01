@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "SELECT \r\n\tDiaMora\r\n\t,LEFT(NumTarjeta, 8) + '****' + RIGHT(NumTarjeta, 4) AS NumTarjeta2\r\n\t,CAST((HASHBYTES('SHA2_512',\r\n\t\tCONVERT(VARCHAR(20), NumTarjeta) COLLATE Modern_Spanish_100_CI_AS_SC_UTF8\r\n\t)) AS BINARY) HashLlaveNegocio\r\nFROM \r\n\tMorosidadTarjetas;",
+						"sqlReaderQuery": "SELECT \r\n\tDiaMora\r\n\t,LEFT(NumTarjeta, 8) + '****' + RIGHT(NumTarjeta, 4) AS NumTarjeta2\r\n\t,CONVERT(VARCHAR(600), (HASHBYTES('SHA2_512',\r\n\t\tCONVERT(VARCHAR(20), NumTarjeta) COLLATE Modern_Spanish_100_CI_AS_SC_UTF8\r\n\t)), 2) HashLlaveNegocio\r\nFROM \r\n\tMorosidadTarjetas;",
 						"queryTimeout": "00:25:00",
 						"isolationLevel": "ReadCommitted",
 						"partitionOption": "None"
