@@ -1,0 +1,65 @@
+{
+	"name": "pl_ingesta_MorosidadTarjetas_sql",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \r\n\tDiaMora\r\n\t,LEFT(NumTarjeta, 8) + '****' + RIGHT(NumTarjeta, 4) AS NumTarjeta\r\n\t,HASHBYTES('SHA2_512',\r\n\t\tCONVERT(VARCHAR(20), NumTarjeta) COLLATE Modern_Spanish_100_CI_AS_SC_UTF8\r\n\t) HashLlaveNegocio\r\nFROM \r\n\tMorosidadTarjetas;",
+						"queryTimeout": "00:25:00",
+						"isolationLevel": "ReadCommitted",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"parallelCopies": 1,
+					"dataIntegrationUnits": 4,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_sql_bikestores_morosidadtarjetas",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adlsg2_parquet_bikestores_morosidadtarjetas",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "DominioTemporalDesarrollo/DataPipelines/PruebasPCIDSS"
+		},
+		"annotations": []
+	}
+}
