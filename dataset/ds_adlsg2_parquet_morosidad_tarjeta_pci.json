@@ -1,0 +1,27 @@
+{
+	"name": "ds_adlsg2_parquet_morosidad_tarjeta_pci",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake_30",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"pr_url_datalake": "https://cualdatalakedev30.dfs.core.windows.net/"
+			}
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/PruebasPCIDSS"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "morosidad_tarjeta_pci.parquet",
+				"folderPath": "bronze/pruebas/pcidss/",
+				"fileSystem": "reg"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
