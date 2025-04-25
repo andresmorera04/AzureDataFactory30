@@ -1,0 +1,62 @@
+{
+	"name": "pl_ing_qs36ftest_factura",
+	"properties": {
+		"activities": [
+			{
+				"name": "cd_ingesta_qs36ftest_factura",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": "SELECT  \r\n\tFECHA\r\n\t,MONTOFACTURA \r\n\t,CLIENTE \r\n\t,(LEFT(NUMTARJETA, 8) || '****' || RIGHT(NUMTARJETA, 4) )AS NUMTARJETA\r\n\t,HEX(\r\n\t\tHASH(\r\n\t\t\tCAST(NUMTARJETA AS VARCHAR(50) CCSID UNICODE),\r\n\t\t\t3\r\n\t\t)\r\n\t) AS HashLlaveNegocio\r\nFROM \r\n\tQS36FTEST.FACTURA;"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"parallelCopies": 1,
+					"dataIntegrationUnits": 4,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_db2_qs36test_factura",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adlg2_qs36ftest_factura",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "DominioTemporalDesarrollo/MnejoTarjetas"
+		},
+		"annotations": []
+	}
+}
