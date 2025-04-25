@@ -1,0 +1,22 @@
+{
+	"name": "ls_db2_laboratorio",
+	"properties": {
+		"description": "ls_db2_laboratorio pci dss",
+		"annotations": [],
+		"type": "Db2",
+		"typeProperties": {
+			"connectionString": "server=dev-mssql2019.ddns.net:50000;database=TESTDB;username=integrator;authenticationType=Basic",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_keyvault_30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"pr_url_keyvault": "https://boclkeyvaultdev30.vault.azure.net/"
+					}
+				},
+				"secretName": "secrdb2cedevmssql2019ddnsnet"
+			}
+		}
+	}
+}
