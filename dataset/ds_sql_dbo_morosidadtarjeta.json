@@ -1,0 +1,29 @@
+{
+	"name": "ds_sql_dbo_morosidadtarjeta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_devvertixddnsnet_bikestores",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/ManejosTarjetas"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "NumTarjeta",
+				"type": "varchar"
+			},
+			{
+				"name": "DiaMora",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MorosidadTarjetas"
+		}
+	}
+}
