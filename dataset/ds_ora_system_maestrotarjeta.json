@@ -1,0 +1,19 @@
+{
+	"name": "ds_ora_system_maestrotarjeta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_oracle_laboratorio",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DominioTemporalDesarrollo/ManejosTarjetas"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SYSTEM",
+			"table": "MAESTROTARJETAS"
+		}
+	}
+}
